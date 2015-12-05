@@ -1,0 +1,19 @@
+weights: model.jl arg_params
+compute objective one example: https://github.com/dmlc/MXNet.jl/blob/master/examples/char-lstm/lstm.jl#L118
+
+MNIST: https://github.com/johnmyleswhite/MNIST.jl
+or: https://github.com/pluskid/Mocha.jl/tree/master/examples/mnist
+
+data provider: http://mxnetjl.readthedocs.org/en/latest/api/io.html#ArrayDataProvider
+
+get gradient
+- simple_bind(arch, context, write_gradient)
+- Executor
+	https://github.com/dmlc/MXNet.jl/blob/master/src/executor.jl
+	- list_arguments -> [:fc1_weights, :fc1_bias, ...]
+	- arg_arrays, grad_arrays
+	- copy data into arg_arrays
+		- input X, weights
+		- forward
+		- backward
+		- => executor.grad_arrays
