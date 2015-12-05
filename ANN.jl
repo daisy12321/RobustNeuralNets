@@ -2,12 +2,12 @@ using MXNet
 #using MNIST
 include("nll.jl")
 
-mlp = @mx.chain mx.Variable(:data) 			        =>
-  mx.FullyConnected(name=:fc1, num_hidden=128)  =>
-  mx.Activation(name=:relu1, act_type = :relu)  =>
-  mx.FullyConnected(name=:fc2, num_hidden=64)   =>
- mx.Activation(name=:relu2, act_type=:relu)     =>
- mx.FullyConnected(name=:fc3, num_hidden=10)    =>
+mlp = @mx.chain mx.Variable(:data)=>
+  mx.FullyConnected(name=:fc1, num_hidden=128)=>
+  mx.Activation(name=:relu1, act_type = :relu)=>
+  mx.FullyConnected(name=:fc2, num_hidden=64)=>
+  mx.Activation(name=:relu2, act_type=:relu)=>
+  mx.FullyConnected(name=:fc3, num_hidden=10)=>
   mx.SoftmaxOutput(name=:softmax)
 
 
@@ -62,9 +62,9 @@ exec = mx.simple_bind(mlp, model.ctx[1]; grad_req=MXNet.mx.GRAD_WRITE, input_sha
 # mx.list_arguments(mlp)
 #model.pred_exec = exec
 
-# # fit model
+# fit model
 mx.fit(model, optimizer, mnist_provider, n_epoch=1, eval_data=eval_provider)
-
+# copy the parameters to executer 
 mx.copy_params_from(exec, model.arg_params, model.aux_params)
 
 
@@ -80,24 +80,34 @@ mx.copy_params_from(exec, model.arg_params, model.aux_params)
 
 ###############################
 ##### show weights
-copy(model.arg_params[:fc2_weight])
+# fc1_weights = copy(model.arg_params[:fc1_weight])
 
 mx.forward(exec, is_train=true)
+
 mx.backward(exec)
-# # copy outputs into cpu ndarray, for evaluation metric
-# for (cpu_out, dev_out) in zip(cpu_output_arrays, texec.outputs)
-#   copy!(slice(cpu_out, islice), dev_out)
-# end
-
-
-
 
 ##### show gradients
-model.pred_exec.grad_arrays
-copy(model.pred_exec.grad_arrays[7])
-copy(exec.grad_arrays[3])
-# Q. why all zeros?
+exec.grad_arrays
 
+function get_xgrad(exec)
+  fc1_weights = copy(exec.arg_arrays[2])
+  grad_activation = copy(exec.grad_arrays[3])
+  hgrad = zeros(length(grad_activation));
+  xgrad = zeros(shape[1]);
+  for i = 1:length(grad_activation)
+    if grad_activation[i] > 0.0001 
+      hgrad[i] = 1
+    end    
+  end
+
+  for j = 1:shape[1]
+    xgrad[j] = sum(grad_activation[i]*hgrad[i]*fc1_weights[j,i])
+  end
+
+  return(xgrad)
+end
+
+xgrad = get_xgrad(exec)
 
 
 
@@ -117,7 +127,8 @@ while (abs(nll_new - nll_old) > 1 | i < 5)
   i = i+1;
   # find most adversarial delta x
 	# update x_i with x_i + rho * sign(grad) [l-infinity]
-  # for now do a random noise
+  
+  xgrad = get_xgrad(exec)
 	a = a + 0.01 * rand(size(a));
 
 	mnist_provider = mx.ArrayDataProvider(a, labels, batch_size = batch_size);
