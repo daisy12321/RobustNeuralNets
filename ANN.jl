@@ -59,30 +59,43 @@ input_shapes = mx.provide_data(mnist_provider)
 
 # set up the executor, pass onto model
 exec = mx.simple_bind(mlp, model.ctx[1]; grad_req=MXNet.mx.GRAD_WRITE, input_shapes...)
-mx.list_arguments(mlp)
-model.pred_exec = exec
+# mx.list_arguments(mlp)
+#model.pred_exec = exec
 
-# fit model
+# # fit model
 mx.fit(model, optimizer, mnist_provider, n_epoch=1, eval_data=eval_provider)
 
+mx.copy_params_from(exec, model.arg_params, model.aux_params)
 
-###### make prediction ######
-probs = mx.predict(model, eval_provider)
-pred = mx.zeros(size(probs))
-copy!(pred, probs)
-# get nll
-nll = NLL()
-mx.reset!(nll)
-mx.update!(nll, [labels_eval_ND], [pred])
-nll
+
+# ###### make prediction ######
+# probs = mx.predict(model, eval_provider)
+# pred = mx.zeros(size(probs))
+# copy!(pred, probs)
+# # get nll
+# nll = NLL()
+# mx.reset!(nll)
+# mx.update!(nll, [labels_eval_ND], [pred])
+# nll
 
 ###############################
 ##### show weights
 copy(model.arg_params[:fc2_weight])
+
+mx.forward(exec, is_train=true)
+mx.backward(exec)
+# # copy outputs into cpu ndarray, for evaluation metric
+# for (cpu_out, dev_out) in zip(cpu_output_arrays, texec.outputs)
+#   copy!(slice(cpu_out, islice), dev_out)
+# end
+
+
+
+
 ##### show gradients
 model.pred_exec.grad_arrays
-copy(model.pred_exec.grad_arrays[2])
-copy(exec.grad_arrays[2])
+copy(model.pred_exec.grad_arrays[7])
+copy(exec.grad_arrays[3])
 # Q. why all zeros?
 
 
