@@ -1,0 +1,16 @@
+\begin{thebibliography}{1}
+
+\bibitem{bertsimas2015robust}
+Dimitris Bertsimas, Jack Dunn, Colin Pawlowski, and Daisy Zhuo.
+\newblock Robust classification.
+\newblock {\em Submitted for publication}, 2015.
+
+\bibitem{mxnet}
+Tianqi Chen, Mu~Li, Yutian Li, Min Lin, Naiyan Wang, Minjie Wang, Tianjun Xiao,
+  Bing Xu, Chiyuan Zhang, and Zheng Zhang.
+\newblock Mxnet: A flexible and efficient machine learning library for
+  heterogeneous distributed systems.
+\newblock Neural Information Processing Systems, Workshop on Machine Learning
+  Systems, 2015.
+
+\end{thebibliography}

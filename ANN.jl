@@ -72,7 +72,12 @@ exec = mx.simple_bind(mlp, model.ctx[1]; grad_req=MXNet.mx.GRAD_WRITE, input_sha
 mx.copy_params_from(exec, model.arg_params, model.aux_params)
 # mx.list_arguments(mlp)
 
-
+### visualization 
+# open("visualize.dot", "w") do io
+#   println(io, mx.to_graphviz(mlp))
+# end
+# run(pipeline(`dot -Tsvg visualize.dot `, stdout="visualize.svg"))
+# run(pipeline(`dot -Tpdf visualize.dot `, stdout="visualize.pdf"))
 
 function get_xgrad(exec)
   # mx.forward(exec)

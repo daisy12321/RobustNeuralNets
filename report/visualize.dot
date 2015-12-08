@@ -1,0 +1,17 @@
+digraph "Network Visualization" {
+graph [rankdir=RL];
+node [fontsize=10];
+edge [fontsize=10];
+"fc1"  [label="fc1\nFullyConnected\nnum-hidden=128",style=filled,fixedsize=true,width=1.3,fillcolor="#fb8072",shape=box,height=0.8034];
+"relu1"  [label="relu1\nActivation\nact-type=relu",style=filled,fixedsize=true,width=1.3,fillcolor="#ffffb3",shape=box,height=0.8034];
+"fc2"  [label="fc2\nFullyConnected\nnum-hidden=64",style=filled,fixedsize=true,width=1.3,fillcolor="#fb8072",shape=box,height=0.8034];
+"relu2"  [label="relu2\nActivation\nact-type=relu",style=filled,fixedsize=true,width=1.3,fillcolor="#ffffb3",shape=box,height=0.8034];
+"fc3"  [label="fc3\nFullyConnected\nnum-hidden=10",style=filled,fixedsize=true,width=1.3,fillcolor="#fb8072",shape=box,height=0.8034];
+"softmax"  [label="softmax\nSoftmaxOutput",style=filled,fixedsize=true,width=1.3,fillcolor="#b3de69",shape=box,height=0.8034];
+"relu1" -> "fc1"  [arrowtail=open,dir=back];
+"fc2" -> "relu1"  [arrowtail=open,dir=back];
+"relu2" -> "fc2"  [arrowtail=open,dir=back];
+"fc3" -> "relu2"  [arrowtail=open,dir=back];
+"softmax" -> "fc3"  [arrowtail=open,dir=back];
+}
+

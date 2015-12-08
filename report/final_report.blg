@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2015)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: final_report.aux
+The style file: plain.bst
+Database file #1: ref.bib
+Warning--empty booktitle in mxnet
+You've used 2 entries,
+            2118 wiz_defined-function locations,
+            506 strings with 4465 characters,
+and the built_in function-call counts, 840 in all, are:
+= -- 67
+> -- 76
+< -- 0
++ -- 30
+- -- 28
+* -- 69
+:= -- 159
+add.period$ -- 6
+call.type$ -- 2
+change.case$ -- 20
+chr.to.int$ -- 0
+cite$ -- 3
+duplicate$ -- 23
+empty$ -- 44
+format.name$ -- 28
+if$ -- 157
+int.to.chr$ -- 0
+int.to.str$ -- 2
+missing$ -- 2
+newline$ -- 13
+num.names$ -- 4
+pop$ -- 25
+preamble$ -- 1
+purify$ -- 18
+quote$ -- 0
+skip$ -- 13
+stack$ -- 0
+substring$ -- 10
+swap$ -- 2
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 8
+warning$ -- 1
+while$ -- 4
+width$ -- 3
+write$ -- 22
+(There was 1 warning)
