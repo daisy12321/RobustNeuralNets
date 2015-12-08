@@ -14,14 +14,13 @@ mlp = @mx.chain mx.Variable(:data)=>
 ###########################################
 # get data 
 # manually get the data from train_provider
-batch_size = 100
+batch_size = 10000
 include(Pkg.dir("MXNet", "examples", "mnist", "mnist-data.jl"))
 train_provider, eval_provider = get_mnist_providers(batch_size)
 
 shape = mx.provide_data(train_provider)[1][2]
 
 # create Julia arrays for training
-# very slow, any way to speed up?
 a = zeros(shape[1], 0); 
 labels = zeros(0); 
 for batch in mx.eachbatch(train_provider)
@@ -29,6 +28,8 @@ for batch in mx.eachbatch(train_provider)
 	a = hcat(a, copy(dataTmp))
 	labels = vcat(labels, copy(mx.get_label(train_provider, batch)[1]))
 end
+a_ND = mx.zeros(size(a))
+copy!(a_ND, a)
 labels_ND = mx.zeros(size(labels))
 copy!(labels_ND, labels)
 
@@ -43,10 +44,16 @@ end
 labels_eval_ND = mx.zeros(size(labels_eval))
 copy!(labels_eval_ND, labels_eval)
 
-mnist_provider = mx.ArrayDataProvider(a, labels, batch_size = batch_size)
-eval_provider = mx.ArrayDataProvider(b, labels_eval, batch_size = batch_size)
+new_batch_size = 100
+mnist_provider = mx.ArrayDataProvider(a, labels, batch_size = new_batch_size)
+eval_provider = mx.ArrayDataProvider(b, labels_eval, batch_size = new_batch_size)
 
 
+
+# batch_new = mx.ArrayDataBatch()
+# for batch in mx.eachbatch(eval_provider)
+#   batch_new = println(batch)
+# end
 
 #############################################
 # setup model
@@ -57,15 +64,50 @@ optimizer = mx.SGD(lr=0.1, momentum=0.9, weight_decay=0.00001)
 
 input_shapes = mx.provide_data(mnist_provider)
 
+# fit model
+mx.fit(model, optimizer, mnist_provider, n_epoch=1, eval_data=eval_provider)
+mx.copy_params_from(exec, model.arg_params, model.aux_params)
+
 # set up the executor, pass onto model
 exec = mx.simple_bind(mlp, model.ctx[1]; grad_req=MXNet.mx.GRAD_WRITE, input_shapes...)
+# exec = mx.bind(mlp, model.ctx[1], Dict(:data => a_ND, 
+                                        # :fc1_weight => model.arg_params[:fc1_weight],
+                                        # :fc1_bias => model.arg_params[:fc1_bias],
+                                        # :fc2_weight => model.arg_params[:fc2_weight],
+                                        # :fc2_bias => model.arg_params[:fc2_bias],
+                                        # :fc3_weight => model.arg_params[:fc3_weight],
+                                        # :fc3_bias => model.arg_params[:fc3_bias],
+                                        # :softmax_label => labels_ND))
 # mx.list_arguments(mlp)
 #model.pred_exec = exec
 
-# fit model
+batch = mx.ArrayDataBatch(1:100)
+for batch in mx.eachbatch(mnist_provider)
+    idx = batch.idx
+    data = mx.get_data(mnist_provider, batch)[1]
+    # update exec with the current data
+    exec.arg_arrays[1] = data
+    exec.arg_dict[:data] = data
+
+    # update the gradient using backward call
+    # mx.forward(exec, is_train=true)
+    mx.backward(exec)
+    xgrad = get_xgrad(exec)
+    anew[:, idx] = a[:, idx] + 0.01 * repmat(sign(xgrad), 1, size(a, 2))
+    # println(copy(exec.grad_arrays[3]))
+  end
+
+
+# mx.copy_params_from(exec, model.arg_params, model.aux_params)
+
+copy(exec.arg_arrays[8])[1:5]
+
 function get_info()
-  mx.every_n_batch(1, call_on_0=true) do state :: mx.OptimizationState
-    info("Testing")
+  mx.every_n_batch(50, call_on_0=true) do state :: mx.OptimizationState
+    #info("Testing")
+    println(state.curr_batch)
+    mx.copy_params_from(exec, model.arg_params, model.aux_params)
+    print(copy(exec.arg_arrays[8])[1:5])
   end
 end
 
@@ -96,6 +138,7 @@ for batch in mx.eachbatch(mnist_provider)
 end
 ##### show gradients
 exec.grad_arrays
+# copy(exec.grad_arrays[8])
 
 function get_xgrad(exec)
 
@@ -139,11 +182,25 @@ while (abs(nll_new - nll_old) > 10 | i < 20)
   mx.srand!(1234)
 	mx.fit(model, optimizer, mnist_provider, n_epoch=1, eval_data=eval_provider)
   mx.copy_params_from(exec, model.arg_params, model.aux_params)
+  
+  for batch in mx.eachbatch(mnist_provider)
+    idx = batch.idx
+    data = mx.get_data(mnist_provider, batch)[1]
+    # update exec with the current data
+    exec.arg_arrays[1] = data
+    exec.arg_dict[:data] = data
 
+    # update the gradient using backward call
+    # mx.forward(exec, is_train=true)
+    mx.backward(exec)
+    xgrad = get_xgrad(exec)
+    anew[:, idx] = a[:, idx] + 0.01 * repmat(sign(xgrad), 1, size(a, 2))
+    # println(copy(exec.grad_arrays[3]))
+  end
 
   # find most adversarial delta x
   # update x_i with x_i + rho * sign(grad) [l-infinity]
-  xgrad = get_xgrad(exec)
+
   anew = a + 0.01 * rand(size(a));
   # anew = a + 0.01 * repmat(sign(xgrad), 1, size(a, 2))
 
