@@ -1,0 +1,28 @@
+\begin{thebibliography}{1}
+
+\bibitem{bertsimas2015robust}
+Dimitris Bertsimas, Jack Dunn, Colin Pawlowski, and Daisy Zhuo.
+\newblock Robust classification.
+\newblock {\em Submitted for publication}, 2015.
+
+\bibitem{hinton2012improving}
+Geoffrey~E Hinton, Nitish Srivastava, Alex Krizhevsky, Ilya Sutskever, and
+  Ruslan~R Salakhutdinov.
+\newblock Improving neural networks by preventing co-adaptation of feature
+  detectors.
+\newblock {\em arXiv preprint arXiv:1207.0580}, 2012.
+
+\bibitem{simard2003best}
+Patrice~Y Simard, Dave Steinkraus, and John~C Platt.
+\newblock Best practices for convolutional neural networks applied to visual
+  document analysis.
+\newblock In {\em null}, page 958. IEEE, 2003.
+
+\bibitem{srivastava2014dropout}
+Nitish Srivastava, Geoffrey Hinton, Alex Krizhevsky, Ilya Sutskever, and Ruslan
+  Salakhutdinov.
+\newblock Dropout: A simple way to prevent neural networks from overfitting.
+\newblock {\em The Journal of Machine Learning Research}, 15(1):1929--1958,
+  2014.
+
+\end{thebibliography}

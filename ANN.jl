@@ -66,82 +66,17 @@ input_shapes = mx.provide_data(mnist_provider)
 
 # fit model
 mx.fit(model, optimizer, mnist_provider, n_epoch=1, eval_data=eval_provider)
-mx.copy_params_from(exec, model.arg_params, model.aux_params)
 
 # set up the executor, pass onto model
 exec = mx.simple_bind(mlp, model.ctx[1]; grad_req=MXNet.mx.GRAD_WRITE, input_shapes...)
-# exec = mx.bind(mlp, model.ctx[1], Dict(:data => a_ND, 
-                                        # :fc1_weight => model.arg_params[:fc1_weight],
-                                        # :fc1_bias => model.arg_params[:fc1_bias],
-                                        # :fc2_weight => model.arg_params[:fc2_weight],
-                                        # :fc2_bias => model.arg_params[:fc2_bias],
-                                        # :fc3_weight => model.arg_params[:fc3_weight],
-                                        # :fc3_bias => model.arg_params[:fc3_bias],
-                                        # :softmax_label => labels_ND))
-# mx.list_arguments(mlp)
-#model.pred_exec = exec
-
-batch = mx.ArrayDataBatch(1:100)
-for batch in mx.eachbatch(mnist_provider)
-    idx = batch.idx
-    data = mx.get_data(mnist_provider, batch)[1]
-    # update exec with the current data
-    exec.arg_arrays[1] = data
-    exec.arg_dict[:data] = data
-
-    # update the gradient using backward call
-    # mx.forward(exec, is_train=true)
-    mx.backward(exec)
-    xgrad = get_xgrad(exec)
-    anew[:, idx] = a[:, idx] + 0.01 * repmat(sign(xgrad), 1, size(a, 2))
-    # println(copy(exec.grad_arrays[3]))
-  end
-
-
-# mx.copy_params_from(exec, model.arg_params, model.aux_params)
-
-copy(exec.arg_arrays[8])[1:5]
-
-function get_info()
-  mx.every_n_batch(50, call_on_0=true) do state :: mx.OptimizationState
-    #info("Testing")
-    println(state.curr_batch)
-    mx.copy_params_from(exec, model.arg_params, model.aux_params)
-    print(copy(exec.arg_arrays[8])[1:5])
-  end
-end
-
-mx.fit(model, optimizer, mnist_provider, n_epoch=1, eval_data=eval_provider, callbacks = [get_info()])
-# copy the parameters to executer 
 mx.copy_params_from(exec, model.arg_params, model.aux_params)
+# mx.list_arguments(mlp)
 
 
-# ###### make prediction ######
-probs = mx.predict(model, eval_provider)
-pred = mx.zeros(size(probs))
-copy!(pred, probs)
-# get nll
-nll = NLL()
-mx.reset!(nll)
-mx.update!(nll, [labels_eval_ND], [pred])
-nll
-
-###############################
-##### show weights
-# fc1_weights = copy(model.arg_params[:fc1_weight])
-
-
-for batch in mx.eachbatch(mnist_provider)
-  mx.forward(exec, is_train=true)
-  mx.backward(exec)
-  # println(copy(exec.grad_arrays[3]))
-end
-##### show gradients
-exec.grad_arrays
-# copy(exec.grad_arrays[8])
 
 function get_xgrad(exec)
-
+  # mx.forward(exec)
+  # mx.backward(exec)
   fc1_weights = copy(exec.arg_arrays[2])
   grad_activation = copy(exec.grad_arrays[3])
   hgrad = zeros(length(grad_activation));
@@ -163,15 +98,67 @@ end
 xgrad = get_xgrad(exec)
 
 
-input_shapes = mx.provide_data(mnist_provider)
+
+
+batch = mx.ArrayDataBatch(1:100)
+
+
+
+# mx.copy_params_from(exec, model.arg_params, model.aux_params)
+
+copy(exec.arg_arrays[8])[1:5]
+
+# function get_info()
+#   mx.every_n_batch(50, call_on_0=true) do state :: mx.OptimizationState
+#     #info("Testing")
+#     println(state.curr_batch)
+#     mx.copy_params_from(exec, model.arg_params, model.aux_params)
+#     print(copy(exec.arg_arrays[8])[1:5])
+#   end
+# end
+
+# mx.fit(model, optimizer, mnist_provider, n_epoch=1, eval_data=eval_provider, callbacks = [get_info()])
+# # copy the parameters to executer 
+# mx.copy_params_from(exec, model.arg_params, model.aux_params)
+
+
+# ###### make prediction ######
+probs = mx.predict(model, eval_provider)
+pred = mx.zeros(size(probs))
+copy!(pred, probs)
+# get nll
+nll = NLL()
+mx.reset!(nll)
+mx.update!(nll, [labels_eval_ND], [pred])
+nll
+
+###############################
+##### show weights
+# fc1_weights = copy(model.arg_params[:fc1_weight])
+
+
+# for batch in mx.eachbatch(mnist_provider)
+#   mx.forward(exec, is_train=true)
+#   mx.backward(exec)
+#   # println(copy(exec.grad_arrays[3]))
+# end
+# ##### show gradients
+# exec.grad_arrays
+# copy(exec.grad_arrays[8])
+
+
 ##### Adversarial Robust Training ####
+input_shapes = mx.provide_data(mnist_provider);
 i = 0
-nll_old = 100000
-nll_new = 50000
-mnist_provider = mx.ArrayDataProvider(a, labels, batch_size = batch_size);
+nll_old = 100000;
+nll_new = 50000;
+mnist_provider = mx.ArrayDataProvider(a, labels, batch_size = new_batch_size);
+anew = a; 
+nll = NLL();
 while (abs(nll_new - nll_old) > 10 | i < 20)
 
-  nll_old = nll_new
+
+  nll_old = nll_new;
   i = i+1;
 
   model = mx.FeedForward(mlp, context=mx.cpu())
@@ -180,9 +167,10 @@ while (abs(nll_new - nll_old) > 10 | i < 20)
 
 	# fit parameters
   mx.srand!(1234)
-	mx.fit(model, optimizer, mnist_provider, n_epoch=1, eval_data=eval_provider)
+	mx.fit(model, optimizer, mnist_provider, n_epoch=3, eval_data=eval_provider)
   mx.copy_params_from(exec, model.arg_params, model.aux_params)
   
+  # to get gradient, given current weight, for each batch
   for batch in mx.eachbatch(mnist_provider)
     idx = batch.idx
     data = mx.get_data(mnist_provider, batch)[1]
@@ -191,26 +179,22 @@ while (abs(nll_new - nll_old) > 10 | i < 20)
     exec.arg_dict[:data] = data
 
     # update the gradient using backward call
-    # mx.forward(exec, is_train=true)
     mx.backward(exec)
     xgrad = get_xgrad(exec)
-    anew[:, idx] = a[:, idx] + 0.01 * repmat(sign(xgrad), 1, size(a, 2))
+    # find most adversarial delta x
+    # update x_i with x_i + rho * sign(grad) [l-infinity]
+    anew[:, idx] = a[:, idx] + 0.01 * repmat(sign(xgrad), 1, new_batch_size)
     # println(copy(exec.grad_arrays[3]))
   end
 
-  # find most adversarial delta x
-  # update x_i with x_i + rho * sign(grad) [l-infinity]
+  # anew = a + 0.01 * rand(size(a));
 
-  anew = a + 0.01 * rand(size(a));
-  # anew = a + 0.01 * repmat(sign(xgrad), 1, size(a, 2))
-
-  mnist_provider = mx.ArrayDataProvider(anew, labels, batch_size = batch_size)
+  mnist_provider = mx.ArrayDataProvider(anew, labels, batch_size = new_batch_size)
 	probs = mx.predict(model, mnist_provider)
   pred = mx.zeros(size(probs))
   copy!(pred, probs)
 
   # update NLL
-
   mx.reset!(nll)
   mx.update!(nll, [labels_ND], [pred])
   nll_new = nll.nll_sum
