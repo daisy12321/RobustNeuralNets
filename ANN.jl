@@ -63,33 +63,42 @@ exec = mx.simple_bind(mlp, model.ctx[1]; grad_req=MXNet.mx.GRAD_WRITE, input_sha
 #model.pred_exec = exec
 
 # fit model
-mx.fit(model, optimizer, mnist_provider, n_epoch=1, eval_data=eval_provider)
+function get_info()
+  mx.every_n_batch(1, call_on_0=true) do state :: mx.OptimizationState
+    info("Testing")
+  end
+end
+
+mx.fit(model, optimizer, mnist_provider, n_epoch=1, eval_data=eval_provider, callbacks = [get_info()])
 # copy the parameters to executer 
 mx.copy_params_from(exec, model.arg_params, model.aux_params)
 
 
 # ###### make prediction ######
-# probs = mx.predict(model, eval_provider)
-# pred = mx.zeros(size(probs))
-# copy!(pred, probs)
-# # get nll
-# nll = NLL()
-# mx.reset!(nll)
-# mx.update!(nll, [labels_eval_ND], [pred])
-# nll
+probs = mx.predict(model, eval_provider)
+pred = mx.zeros(size(probs))
+copy!(pred, probs)
+# get nll
+nll = NLL()
+mx.reset!(nll)
+mx.update!(nll, [labels_eval_ND], [pred])
+nll
 
 ###############################
 ##### show weights
 # fc1_weights = copy(model.arg_params[:fc1_weight])
 
-mx.forward(exec, is_train=true)
 
-mx.backward(exec)
-
+for batch in mx.eachbatch(mnist_provider)
+  mx.forward(exec, is_train=true)
+  mx.backward(exec)
+  # println(copy(exec.grad_arrays[3]))
+end
 ##### show gradients
 exec.grad_arrays
 
 function get_xgrad(exec)
+
   fc1_weights = copy(exec.arg_arrays[2])
   grad_activation = copy(exec.grad_arrays[3])
   hgrad = zeros(length(grad_activation));
@@ -101,40 +110,44 @@ function get_xgrad(exec)
   end
 
   for j = 1:shape[1]
-    xgrad[j] = sum(grad_activation[i]*hgrad[i]*fc1_weights[j,i])
+    xgrad[j] = sum(grad_activation .* hgrad .* fc1_weights[j,:])
   end
 
   return(xgrad)
+
 end
 
 xgrad = get_xgrad(exec)
 
 
-
+input_shapes = mx.provide_data(mnist_provider)
 ##### Adversarial Robust Training ####
-######### Need help #########
-# while not converge
-# Q1. how to get the weights or objective to check convergence?
-# Q2. how to get gradient with respect to x_i?
-# Q3. how to update the data in a provider?
-
 i = 0
 nll_old = 100000
 nll_new = 50000
-while (abs(nll_new - nll_old) > 1 | i < 5)
+mnist_provider = mx.ArrayDataProvider(a, labels, batch_size = batch_size);
+while (abs(nll_new - nll_old) > 10 | i < 20)
 
   nll_old = nll_new
   i = i+1;
-  # find most adversarial delta x
-	# update x_i with x_i + rho * sign(grad) [l-infinity]
-  
-  xgrad = get_xgrad(exec)
-	a = a + 0.01 * rand(size(a));
 
-	mnist_provider = mx.ArrayDataProvider(a, labels, batch_size = batch_size);
+  model = mx.FeedForward(mlp, context=mx.cpu())
+  optimizer = mx.SGD(lr=0.1, momentum=0.9, weight_decay=0.00001)
+  exec = mx.simple_bind(mlp, model.ctx[1]; grad_req=MXNet.mx.GRAD_WRITE, input_shapes...)
+
 	# fit parameters
+  mx.srand!(1234)
 	mx.fit(model, optimizer, mnist_provider, n_epoch=1, eval_data=eval_provider)
+  mx.copy_params_from(exec, model.arg_params, model.aux_params)
 
+
+  # find most adversarial delta x
+  # update x_i with x_i + rho * sign(grad) [l-infinity]
+  xgrad = get_xgrad(exec)
+  anew = a + 0.01 * rand(size(a));
+  # anew = a + 0.01 * repmat(sign(xgrad), 1, size(a, 2))
+
+  mnist_provider = mx.ArrayDataProvider(anew, labels, batch_size = batch_size)
 	probs = mx.predict(model, mnist_provider)
   pred = mx.zeros(size(probs))
   copy!(pred, probs)
