@@ -58,6 +58,32 @@ There is extensive evidence in the literature that robust solutions have signifi
 
 \section{Theoretical Derivation}
 
+Let $J(\M x^{(i)}, \M y^{(i)}, \M w)$ be the negative log likelihood of single training data point $( \M x^{(i)}, \M y^{(i)} )$ in a neural network, the optimization problem to be solved is
+\begin{equation}
+\min_{\M w} ~ \sum_{i=1}^n J(\M x^{(i)}, \M y^{(i)}, \M w)
+\end{equation}
+
+Under a given uncetainty set $\Cal U$, the robust formulation of ANN is then:
+\begin{equation}\label{eq:RANN}
+\min_{\M w} ~ \max_{\Delta \M x}  \sum_{i=1}^n J(\M x^{(i)} + \Delta \M x^{(i)}, \M y^{(i)}, \M w)
+\end{equation}
+
+The robust counterpart for Problem \eqref{eq:RANN} cannot be readily obtained, due to the complex non-linear and non-convex structure of the objective function. However, we can employ an iterative method: first fix $\Delta \M x$, optimize with respect to $\M w$. Then we fix $\M w$ and find the most adversarial $\Delta \M x$, and iterate until convergence.
+
+Given $\Delta \M x$, the outer optimization problem with respect to $\M w$ is just a classic ANN and can be solved efficiently. The inner maximization problem requires a little more machinery. To simplify the problem a bit, we can assume $\Cal U$ decouples across the data points. For example, a common uncertainty set can be constructed as $\| \M x^{(i)} \|_p \leq \rho$ for all $i$. This way, the inner minimization is separable among the $i$'s; i.e., we need to solve for 
+\begin{equation}\label{eq:RANN_inner}
+\max_{\Delta \M x^{(i}}  J(\M x^{(i)} + \Delta \M x^{(i)}, \M y^{(i)}, \M w)
+\end{equation}
+
+for each $i$. As demonstrated in \cite{bertsimas2015robust}, the particular choice of uncertainty set does not affect the improvement drastically for many classifiers.
+
+To solve Problem \eqref{eq:RANN_inner}, we consider a Taylor first-order expansion:
+\begin{equation}\label{eq:RANN_taylor}
+J(\M x^{(i)} + \Delta \M x^{(i)}, \M y^{(i)}, \M w) = J(\M x^{(i)}, \M y^{(i)}, \M w) + \nabla_{x^{(i)}} J(\M x^{(i)}, \M y^{(i)}, \M w) ^T \Delta \M x^{(i)}
+\end{equation}
+
+
+
 connection to regularization?
 
 \section{Implementation and Computational Results}
@@ -70,7 +96,7 @@ I implemented Robust-ANN in the programming language \textsf{Julia} with package
 
 
 
-The procedure in Robust-ANN is as follows: after an iteration of normal ANN, a backward call is ran on each small batch to obtain the gradients. A small complication is that \textsf{MXNet} does not provide gradient with respect to the data $\M x_i$, we take the current first level weights $\M w$, the gradient with respect to the ReLU activation $\frac{\partial J}{\partial \M a}$ and do the following calculation:
+The procedure in Robust-ANN is as follows: after an iteration of basic ANN, a backward call is ran on each small batch to obtain the gradients. A small complication is that \textsf{MXNet} does not provide gradient with respect to the data $\M x_i$, we take the current first level weights $\M w$, the gradient with respect to the ReLU activation $\frac{\partial J}{\partial \M a}$ and do the following calculation:
 
 
 \begin{equation}
@@ -81,7 +107,9 @@ The procedure in Robust-ANN is as follows: after an iteration of normal ANN, a b
 \end{aligned}
 \end{equation}
 
-Depending on the choice of uncertainty set, we can construct the adversarial $\Delta \M x_i$ differently. In this example, we consider the $l_\infty$ norm uncertainty set and therefore obtain $\M x_i^{\textrm{new}} = \M x_i^{\textrm{old}} + \rho * sign(\frac{\partial J}{\partial \M x})$.
+Depending on the choice of uncertainty set, we can construct different adversarial $\Delta \M x_i$. In this example, we consider the $l_\infty$ norm uncertainty set and therefore obtain $\M x_i^{\textrm{new}} = \M x_i^{\textrm{old}} + \rho * sign(\frac{\partial J}{\partial \M x})$. We can now fit the a new basic ANN with the updated $\M x_i^{\textrm{new}}$ until convergence.
+
+
 
 \section{Conclusions}
 
