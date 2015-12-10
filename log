@@ -1,0 +1,368 @@
+INFO: Start training on [CPU0]
+INFO: Initializing parameters...
+INFO: Creating KVStore...
+INFO: Start training...
+INFO: == Epoch 001 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.7581
+INFO:               time = 2.0150 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9553
+INFO: == Epoch 002 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9602
+INFO:               time = 1.5298 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9677
+INFO: == Epoch 003 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9725
+INFO:               time = 1.5386 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9694
+NLL on training: 4120.01
+INFO: Start training on [CPU0]
+INFO: Initializing parameters...
+INFO: Creating KVStore...
+INFO: Start training...
+INFO: == Epoch 001 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.7588
+INFO:               time = 1.6964 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9531
+INFO: == Epoch 002 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9600
+INFO:               time = 1.5379 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9693
+INFO: == Epoch 003 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9727
+INFO:               time = 1.7069 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9673
+NLL on training: 4435.59
+INFO: Start training on [CPU0]
+INFO: Initializing parameters...
+INFO: Creating KVStore...
+INFO: Start training...
+INFO: == Epoch 001 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.7582
+INFO:               time = 1.3444 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9534
+INFO: == Epoch 002 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9592
+INFO:               time = 1.2943 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9654
+INFO: == Epoch 003 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9715
+INFO:               time = 1.2379 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9691
+NLL on training: 4241.44
+INFO: Start training on [CPU0]
+INFO: Initializing parameters...
+INFO: Creating KVStore...
+INFO: Start training...
+INFO: == Epoch 001 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.7589
+INFO:               time = 1.2512 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9500
+INFO: == Epoch 002 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9590
+INFO:               time = 1.2256 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9679
+INFO: == Epoch 003 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9713
+INFO:               time = 1.2285 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9654
+NLL on training: 4816.74
+INFO: Start training on [CPU0]
+INFO: Initializing parameters...
+INFO: Creating KVStore...
+INFO: Start training...
+INFO: == Epoch 001 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.7592
+INFO:               time = 1.2307 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9555
+INFO: == Epoch 002 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9620
+INFO:               time = 1.2545 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9659
+INFO: == Epoch 003 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9733
+INFO:               time = 1.2543 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9718
+NLL on training: 3860.62
+INFO: Start training on [CPU0]
+INFO: Initializing parameters...
+INFO: Creating KVStore...
+INFO: Start training...
+INFO: == Epoch 001 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.7600
+INFO:               time = 1.2671 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9530
+INFO: == Epoch 002 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9607
+INFO:               time = 1.2286 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9671
+INFO: == Epoch 003 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9721
+INFO:               time = 1.2261 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9676
+NLL on training: 4212.89
+INFO: Start training on [CPU0]
+INFO: Initializing parameters...
+INFO: Creating KVStore...
+INFO: Start training...
+INFO: == Epoch 001 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.7595
+INFO:               time = 1.2322 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9528
+INFO: == Epoch 002 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9597
+INFO:               time = 1.2562 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9633
+INFO: == Epoch 003 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9709
+INFO:               time = 1.2370 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9684
+NLL on training: 4363.04
+INFO: Start training on [CPU0]
+INFO: Initializing parameters...
+INFO: Creating KVStore...
+INFO: Start training...
+INFO: == Epoch 001 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.7588
+INFO:               time = 1.2341 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9475
+INFO: == Epoch 002 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9605
+INFO:               time = 1.2272 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9676
+INFO: == Epoch 003 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9722
+INFO:               time = 1.2406 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9641
+NLL on training: 4436.61
+INFO: Start training on [CPU0]
+INFO: Initializing parameters...
+INFO: Creating KVStore...
+INFO: Start training...
+INFO: == Epoch 001 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.7597
+INFO:               time = 1.2719 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9554
+INFO: == Epoch 002 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9607
+INFO:               time = 1.2675 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9655
+INFO: == Epoch 003 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9723
+INFO:               time = 1.2598 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9685
+NLL on training: 4142.97
+INFO: Start training on [CPU0]
+INFO: Initializing parameters...
+INFO: Creating KVStore...
+INFO: Start training...
+INFO: == Epoch 001 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.7588
+INFO:               time = 1.2650 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9548
+INFO: == Epoch 002 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9607
+INFO:               time = 1.2819 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9664
+INFO: == Epoch 003 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9714
+INFO:               time = 1.2583 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9581
+NLL on training: 6316.35
+INFO: Start training on [CPU0]
+INFO: Initializing parameters...
+INFO: Creating KVStore...
+INFO: Start training...
+INFO: == Epoch 001 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.7584
+INFO:               time = 1.2574 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9550
+INFO: == Epoch 002 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9602
+INFO:               time = 1.2423 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9638
+INFO: == Epoch 003 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9712
+INFO:               time = 1.2259 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9671
+NLL on training: 4481.29
+INFO: Start training on [CPU0]
+INFO: Initializing parameters...
+INFO: Creating KVStore...
+INFO: Start training...
+INFO: == Epoch 001 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.7590
+INFO:               time = 1.3676 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9546
+INFO: == Epoch 002 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9612
+INFO:               time = 1.2450 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9691
+INFO: == Epoch 003 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9722
+INFO:               time = 1.2623 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9677
+NLL on training: 4433.45
+INFO: Start training on [CPU0]
+INFO: Initializing parameters...
+INFO: Creating KVStore...
+INFO: Start training...
+INFO: == Epoch 001 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.7583
+INFO:               time = 1.3090 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9535
+INFO: == Epoch 002 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9608
+INFO:               time = 1.2374 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9668
+INFO: == Epoch 003 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9725
+INFO:               time = 1.2220 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9695
+NLL on training: 3571.41
+INFO: Start training on [CPU0]
+INFO: Initializing parameters...
+INFO: Creating KVStore...
+INFO: Start training...
+INFO: == Epoch 001 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.7587
+INFO:               time = 1.2890 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9490
+INFO: == Epoch 002 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9612
+INFO:               time = 1.2312 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9686
+INFO: == Epoch 003 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9731
+INFO:               time = 1.2199 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9656
+NLL on training: 4483.71
+INFO: Start training on [CPU0]
+INFO: Initializing parameters...
+INFO: Creating KVStore...
+INFO: Start training...
+INFO: == Epoch 001 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.7590
+INFO:               time = 1.2493 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9540
+INFO: == Epoch 002 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9607
+INFO:               time = 1.2632 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9672
+INFO: == Epoch 003 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9727
+INFO:               time = 1.2532 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9715
+NLL on training: 3762.09
+INFO: Start training on [CPU0]
+INFO: Initializing parameters...
+INFO: Creating KVStore...
+INFO: Start training...
+INFO: == Epoch 001 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.7591
+INFO:               time = 1.3543 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9565
+INFO: == Epoch 002 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9604
+INFO:               time = 1.2562 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9658
+INFO: == Epoch 003 ==========
+INFO: ## Training summary
+INFO:           accuracy = 0.9731
+INFO:               time = 1.2661 seconds
+INFO: ## Validation summary
+INFO:           accuracy = 0.9681
+NLL on training: 4560.38

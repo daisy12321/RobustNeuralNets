@@ -105,13 +105,8 @@ xgrad = get_xgrad(exec)
 
 
 
-batch = mx.ArrayDataBatch(1:100)
-
-
-
 # mx.copy_params_from(exec, model.arg_params, model.aux_params)
-
-copy(exec.arg_arrays[8])[1:5]
+# copy(exec.arg_arrays[8])[1:5]
 
 # function get_info()
 #   mx.every_n_batch(50, call_on_0=true) do state :: mx.OptimizationState
@@ -128,14 +123,14 @@ copy(exec.arg_arrays[8])[1:5]
 
 
 # ###### make prediction ######
-probs = mx.predict(model, eval_provider)
-pred = mx.zeros(size(probs))
-copy!(pred, probs)
-# get nll
-nll = NLL()
-mx.reset!(nll)
-mx.update!(nll, [labels_eval_ND], [pred])
-nll
+# probs = mx.predict(model, eval_provider)
+# pred = mx.zeros(size(probs))
+# copy!(pred, probs)
+# # get nll
+# nll = NLL()
+# mx.reset!(nll)
+# mx.update!(nll, [labels_eval_ND], [pred])
+# nll
 
 ###############################
 ##### show weights
@@ -158,20 +153,20 @@ i = 0
 nll_old = 100000;
 nll_new = 50000;
 mnist_provider = mx.ArrayDataProvider(a, labels, batch_size = new_batch_size);
-anew = a; 
+anew = copy(a); 
 nll = NLL();
-while (abs(nll_new - nll_old) > 10 | i < 20)
+while (abs(nll_new - nll_old) > 4 | i < 20)
 
 
   nll_old = nll_new;
   i = i+1;
 
   model = mx.FeedForward(mlp, context=mx.cpu())
-  optimizer = mx.SGD(lr=0.1, momentum=0.9, weight_decay=0.00001)
+  optimizer = mx.SGD(lr=0.1, momentum=0.9, weight_decay=0.0000)
   exec = mx.simple_bind(mlp, model.ctx[1]; grad_req=MXNet.mx.GRAD_WRITE, input_shapes...)
 
 	# fit parameters
-  mx.srand!(1234)
+  mx.srand!(12345)
 	mx.fit(model, optimizer, mnist_provider, n_epoch=3, eval_data=eval_provider)
   mx.copy_params_from(exec, model.arg_params, model.aux_params)
   
